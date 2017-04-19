@@ -19,7 +19,6 @@ FROZEN_DIR = scripts
 
 # Default target
 all:
-
 include ../../py/mkenv.mk
 include $(TOP)/py/py.mk
 
@@ -75,8 +74,8 @@ $(CLEAN_TARGETS):  clean
 $(GENERIC_TARGETS) $(KCONFIG_TARGETS) $(CLEAN_TARGETS):
 	$(MAKE) -C outdir/$(BOARD) $@
 
-$(LIBMICROPYTHON): | $(Z_EXPORTS)
-build/genhdr/qstr.i.last: | $(Z_EXPORTS)
+$(LIBMICROPYTHON): | $(Z_HEADERS)
+build/genhdr/qstr.i.last: | $(Z_HEADERS)
 
 # If we recreate libmicropython, also cause zephyr.bin relink
 LIBMICROPYTHON_EXTRA_CMD = -$(RM) -f outdir/$(OUTDIR_PREFIX)/zephyr.lnk
