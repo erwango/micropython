@@ -74,8 +74,8 @@ $(CLEAN_TARGETS):  clean
 $(GENERIC_TARGETS) $(KCONFIG_TARGETS) $(CLEAN_TARGETS):
 	$(MAKE) -C outdir/$(BOARD) $@
 
-$(LIBMICROPYTHON): | $(Z_HEADERS)
-build/genhdr/qstr.i.last: | $(Z_HEADERS)
+$(LIBMICROPYTHON): | $(Z_EXPORTS)
+build/genhdr/qstr.i.last: | $(Z_EXPORTS)
 
 # If we recreate libmicropython, also cause zephyr.bin relink
 LIBMICROPYTHON_EXTRA_CMD = -$(RM) -f outdir/$(OUTDIR_PREFIX)/zephyr.lnk
