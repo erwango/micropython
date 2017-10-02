@@ -25,6 +25,7 @@
  */
 #include <zephyr.h>
 #include <console.h>
+#include <net/socket.h>
 #include "zephyr_getchar.h"
 
 int real_main(void);
@@ -35,5 +36,10 @@ void main(void) {
 #else
     zephyr_getchar_init();
 #endif
+
+#if defined(CONFIG_SOCKET_OFFLOAD)
+	socket_offload_init();
+#endif
+
     real_main();
 }
