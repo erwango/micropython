@@ -25,7 +25,9 @@ else:
 
 def dl(url, debug=False):
     proto, dummy, host, path = url.split("/", 3)
+    print("c'est parti")
     ai = socket.getaddrinfo(host, 80)
+    print("ai:", ai)
     addr = ai[0][4]
     s = socket.socket()
     if hasattr(s, "settimeout"):
@@ -85,7 +87,7 @@ def main():
     while 1:
         for url, exp_sha in FILES:
             try:
-                size, sha = dl(url)
+                size, sha = dl(url, True)
             except OSError as e:
                 sys.print_exception(e)
                 dump_state()

@@ -2,7 +2,7 @@ import usocket as socket
 import time
 import hts221
 
-DWEET_IO_IPV4_ADDR="34.203.32.119"
+DWEET_IO_IPV4_ADDR="34.231.80.209"
 
 POST_MSG_PREFIX = "POST /dweet/for/nucleo_f429zi?Temp="
 POST_MSG_POSTFIX = "\r\nConnection: keep-alive\r\n\r\n"
