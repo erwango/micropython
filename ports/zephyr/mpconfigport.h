@@ -46,7 +46,7 @@
 #define MICROPY_PY_ATTRTUPLE        (0)
 #define MICROPY_PY_BUILTINS_ENUMERATE (0)
 #define MICROPY_PY_BUILTINS_FILTER  (0)
-#define MICROPY_PY_BUILTINS_MIN_MAX (0)
+#define MICROPY_PY_BUILTINS_MIN_MAX (1)
 #define MICROPY_PY_BUILTINS_PROPERTY (0)
 #define MICROPY_PY_BUILTINS_RANGE_ATTRS (0)
 #define MICROPY_PY_BUILTINS_REVERSED (0)
@@ -157,4 +157,3 @@ extern const struct _mp_obj_module_t mp_module_zsensor;
 
 // extra built in names to add to the global namespace
 #define MICROPY_PORT_BUILTINS \
-

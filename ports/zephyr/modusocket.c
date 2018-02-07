@@ -41,7 +41,7 @@
 #include <net/socket.h>
 #endif
 
-#define DEBUG_PRINT 0
+#define DEBUG_PRINT 1
 #if DEBUG_PRINT // print debugging info
 #define DEBUG_printf printf
 #else // don't print debugging info
