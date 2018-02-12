@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<link rel="shortcut icon" href="">
+
+ <style>
+.grid {
+  position: relative;
+}
+.title_item {
+  display: table;
+  table-layout: fixed;
+
+  width: 863px;
+  height: 200px;
+  margin: 5px;
+  z-index: 1;
+  border-style: solid;
+  border-color: #e7e7e7;
+}
+.title_item-content {
+  position: relative;
+  border-color: black;
+
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}
+.sensor_cards {
+  position: relative;
+  top: 100px;
+}
+.gauge-item {
+  display: inline-block;
+  table-layout: fixed;
+  position: relative;
+  left: 250px;
+  top: 50px;
+  width: 400px;
+  height: 200px;
+  margin: 5px;
+  z-index: 1;
+  border-style: solid;
+  border-color: #e7e7e7;
+  vertical-align: middle;
+  text-align: center;
+}
+.item {
+  display: inline-block;
+  table-layout: fixed;
+
+  width: 200px;
+  height: 200px;
+  margin: 5px;
+  z-index: 1;
+  border-style: solid;
+  border-color: #e7e7e7;
+  vertical-align: middle;
+  text-align: center;
+}
+.item-content {
+  position: relative;
+  border-color: black;
+
+  vertical-align: middle;
+  text-align: center;
+}
+.w_piegauge {
+  display: inline-block;
+.chart {
+  justify-content: center;
+  align-items: center;
+}
+.chart canvas {
+  position: absolute;
+}
+.percent {
+  position: absolute;
+  z-index: 2;
+}
+}
+
+</style>
+
+<script src="static/easypiechart.min.js"></script>
+
+<script>
+var source = new EventSource("events");
+
+function clear_errors() {
+    document.getElementById("messages").innerHTML = "";
+}
+
+function log_error(error) {
+    document.getElementById("messages").innerHTML = "EventSource error:" + error + "<br>";
+}
+
+function set_val(widget, field, val) {
+    document.querySelectorAll("." + widget).forEach(function(el) {
+        el.querySelector("[data-bind=" + field + "]").innerHTML = val;
+    });
+}
+
+source.onmessage = function(event) {
+    clear_errors();
+
+    var data = JSON.parse(event.data);
+//    console.log(data);
+
+    set_val(data.widget, data.field, data.value);
+}
+
+source.onerror = function(error) {
+    console.log(error);
+    log_error(error);
+}
+</script>
+</head>
+<body>
+
+<div class="title_item">
+<div class="title_item-content">
+
+<div class="w_text">
+    <h1 class="title" data-bind="title">SENSOR DASHBOARD</h1>
+    <h3 data-bind="text">Embedded dashboard for X-NUCLEO-IKS01A1 shield</h3>
+    <h3 data-bind="text">MicroPython powered</h3>
+</div>
+
+</div>
+</div>
+
+<!-- Gauges -->
+<div display: inline-block>
+
+
+<div class="gauge-item" id="thewidget">
+<div class="widget dynamicWidget">
+    </br>
+    <script>
+    source.addEventListener("message", function(event) {
+        var data = JSON.parse(event.data);
+        if (data.widget === "dynamicWidget") {
+                if (data.field === "humidity") {
+                    chart.update(data.value);
+                }
+                if (data.field === "temp") {
+                    chart2.update(data.value);
+                }
+                if (data.field === "angle") {
+                    document.getElementById("thewidget").style.transform = "rotate("+data.value+"deg)";
+                }
+                if (data.field === "magn_value") {
+                    if (data.value > 1) {
+                        document.getElementById("thewidget").style.backgroundColor = "red";
+                    }
+                    else {
+                        document.getElementById("thewidget").style.backgroundColor = "white";
+                    }
+                }
+        }
+    });
+    </script>
+<div class="w_piegauge">
+    <span class="chart" data-percent="100"><span class="percent">100%</span></span>
+    <script>
+    var element = document.querySelector(\'.chart\');
+    var chart = new EasyPieChart(element, {
+        scaleColor: false,
+        barColor: "#1E90FF",
+        lineWidth: 10,
+        onStep: function(from, to, percent) {
+            this.el.children[0].innerHTML = Math.round(percent);
+        }
+    });
+    </script></br></br>
+    Humidity
+</div>
+<div class="w_piegauge">
+    <span class="chart2" data-percent="40"><span class="percent">40%</span></span>
+    <script>
+    var element2 = document.querySelector(\'.chart2\');
+    var chart2 = new EasyPieChart(element2, {
+        scaleColor: false,
+        lineWidth: 10,
+        onStep: function(from, to, percent) {
+            this.el.children[0].innerHTML = Math.round(percent);
+        }
+    });
+    </script></br></br>
+    Temperature
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Cards -->
+<div class="sensor_cards">
+<div class="item">
+<div class="item-content">
+<div class="widget lis3mdl">
+  <h3>LIS3MDL</h3>
+  magn_x : <span data-bind="magn_x"></span><br/>
+  magn_y : <span data-bind="magn_y"></span><br/>
+  magn_z : <span data-bind="magn_z"></span>
+</div>
+</div>
+</div>
+
+<div class="item">
+<div class="item-content">
+<div class="widget hts221">
+  <h3>HTS221</h3>
+  temperature : <span data-bind="temp"></span><br/>
+  humidity : <span data-bind="humidity"></span><br/>
+</div>
+</div>
+</div>
+
+<div class="item">
+<div class="item-content">
+<div class="widget lps25hb">
+  <h3>LPS25HB</h3>
+  temperature : <span data-bind="temp2"></span><br/>
+  pressure : <span data-bind="press"></span><br/>
+</div>
+</div>
+</div>
+
+<div class="item">
+<div class="item-content">
+<div class="widget lsm6ds0">
+  <h3>LSM6DS0</h3>
+  accel_x : <span data-bind="accel_x"></span><br/>
+  accel_y : <span data-bind="accel_y"></span><br/>
+  accel_z : <span data-bind="accel_z"></span><br/>
+  gyro_x : <span data-bind="gyro_x"></span><br/>
+  gyro_y : <span data-bind="gyro_y"></span><br/>
+  gyro_z : <span data-bind="gyro_z"></span>
+</div>
+</div>
+</div>
+
+</div>
+
+</div>
+<div id="messages"></div>
+</div>
+
+</body>
+</html>
